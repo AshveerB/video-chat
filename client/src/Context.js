@@ -1,6 +1,7 @@
 import React, { createContext, useState, useRef, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import Peer from 'simple-peer';
+import axios from 'axios';
 
 const SocketContext = createContext();
 
@@ -86,6 +87,39 @@ const ContextProvider = ({ children }) => {
 		window.location.reload();
 	};
 
+	const initialState = {
+		to: '',
+		subject: '',
+		body: '',
+	};
+
+	const [formState, setFormState] = useState(initialState);
+
+	const handleChange = (event) => {
+		setFormState({ ...formState, [event.target.id]: event.target.value });
+	};
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		if (
+			formState.to === '' ||
+			formState.subject === '' ||
+			formState.body === ''
+		) {
+			return alert('Please fill all fields');
+		} else {
+			axios({
+				method: 'post',
+				url: 'http://localhost:5000/sendmail',
+				data: formState,
+			})
+				.then(setFormState(initialState))
+				.catch((err) => {
+					console.log(err);
+				});
+		}
+	};
+
 	return (
 		<SocketContext.Provider
 			value={{
@@ -101,6 +135,9 @@ const ContextProvider = ({ children }) => {
 				callUser,
 				leaveCall,
 				answerCall,
+				formState,
+				handleChange,
+				handleSubmit
 			}}>
 			{children}
 		</SocketContext.Provider>

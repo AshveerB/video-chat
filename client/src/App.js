@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import VideoPlayer from './components/VideoPlayer';
 import Sidebar from './components/Sidebar';
 import Notifications from './components/Notifications';
+import Email from './components/Email';
 
 const useStyles = makeStyles((theme) => ({
 	appBar: {
@@ -45,6 +46,7 @@ const App = () => {
 			<Sidebar>
 				<Notifications />
 			</Sidebar>
+			<Email />
 		</div>
 	);
 };
